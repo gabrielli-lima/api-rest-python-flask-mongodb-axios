@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumo de API com Axios</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container border mt-5">
+        <div class="row justify-content-between my-10">
+            <h1 class="col-4 ">Lista de Usuários</h1>
+            <button type="button" class="btn btn-success col-4 btn-small"><i class="fas fa-plus"></i> Novo Usuário</button>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const url = 'http://localhost:8080/users'; 
+
+        function getUsers() {
+            axios.get(url)
+                .then(response => {
+                    let users = response.data;
+                    const userList = document.getElementById('user-list');
+                    users = JSON.parse(users)
+                    console.log(typeof users);
+
+                    users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.nome}</td>
+                            <td>${user.idade}</td>
+                            <td>${user.email}</td>
+                            <td class="text-center"><a>
+                                <i class="fas fa-edit text-warning"></i>
+                                &nbsp;
+                                <i class="fas fa-trash text-danger"></i>
+                            </a></td>
+                        `;
+                        userList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao obter os usuários:', error);
+                });
+        }
+        document.addEventListener('DOMContentLoaded', getUsers);
+    </script>
+</body>
+
+</html>
