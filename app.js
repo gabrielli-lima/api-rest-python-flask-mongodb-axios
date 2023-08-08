@@ -1,15 +1,21 @@
-const url = 'http://localhost:8080/users';
+const url = 'http://localhost:8080/users'
 
+const nomeUser = document.getElementById('nomeUser')
+const idadeUser = document.getElementById('idadeUser')
+const emailUser = document.getElementById('emailUser')
+    
+
+var idUser
 function getUsers() {
     axios.get(url)
         .then(response => {
-            let users = response.data;
-            const userList = document.getElementById('user-list');
+            let users = response.data
+            const userList = document.getElementById('user-list')
             users = JSON.parse(users)
-            console.log(users);
+            console.log(users)
 
             users.forEach(user => {
-                const row = document.createElement('tr');
+                const row = document.createElement('tr')
                 console.log(user._id)
 
                 row.innerHTML = `
@@ -18,20 +24,20 @@ function getUsers() {
                             <td>${user.email}</td>
                             <td class="text-center">
                                 
-                                <a><i class="fas fa-edit text-warning"></i></a>
+                                <a onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
                                 &nbsp;
-                                <a onclick="deleteUser('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
+                                <a onclick="deletarUser('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
                             </td>
-                        `;
-                userList.appendChild(row);
-            });
+                        `
+                userList.appendChild(row)
+            })
         })
         .catch(error => {
-            console.error('Erro ao obter os usuários:', error);
-        });
+            console.error('Erro ao obter os usuários:', error)
+        })
 }
 
-function deleteUser(id, nome) {
+function deletarUser(id, nome) {
     if (confirm(`Você quer remover ${nome}?`)) {
         axios.delete(`${url}/${id}`)
             .then(response => console.log(response))
@@ -41,11 +47,6 @@ function deleteUser(id, nome) {
 
 }
 
-const novoUsuario = {
-    nome: document.getElementById('nomeUser').value,
-    idade: document.getElementById('idadeUser').value,
-    email: document.getElementById('emailUser').value
-}
 
 function addNovoUsuario(novoUsuario) {
     console.log(novoUsuario)
@@ -57,31 +58,44 @@ function addNovoUsuario(novoUsuario) {
         .catch(error => console.log(error))
 }
 
-const addUserForm = document.getElementById('addUserForm');
+const addUserForm = document.getElementById('addUserForm')
 
-addUserForm.addEventListener('submit', function () {
-    // event.preventDefault(); // não permite o comportamento padrão do formulário com o botão de submit de recarregar a página
-
-    const nome = document.getElementById('nomeUser').value;
-    const idade = parseInt(document.getElementById('idadeUser').value);
-    const email = document.getElementById('emailUser').value;
+addUserForm.addEventListener('submit', function (event) {
+    event.preventDefault() // não permite o comportamento padrão do formulário com o botão de submit de recarregar a página
 
     const novoUsuario = {
-        nome: nome,
-        idade: idade,
-        email: email
-    };
+        nome: nomeUser.value,
+        idade: parseInt(idadeUser.value),
+        email: emailUser.value
+    }
 
-    addNovoUsuario(novoUsuario);
-    nomeUser.value = '';
-    idadeUser.value = '';
-    emailUser.value = '';
-});
+    addNovoUsuario(novoUsuario)
 
-document.addEventListener('DOMContentLoaded', getUsers);
+    nomeUser.value = ''
+    idadeUser.value = ''
+    emailUser.value = ''
+})
 
-// function updateUser(id, userUpdated){
-//     axios.put(`${url}/${id}`, userUpdated)
-//     .then(response => console.log(response))
-//     .catch(error => console.log(error))
-// }
+document.addEventListener('DOMContentLoaded', getUsers)
+
+function infoUsuario(id, nome, idade, email) {
+    nomeUser.value = nome
+    idadeUser.value = idade
+    emailUser.value = email
+
+    idUser = id
+}
+
+function atualizarUsuario() {
+    console.log(idUser + "wwwww")
+    
+const usuarioAtualiazado = {
+    
+    nome: nomeUser.value,
+    idade: parseInt(idadeUser.value),
+    email: emailUser.value
+}
+    axios.put(`${url}/${idUser}`, usuarioAtualiazado)
+    .then(response => console.log(response))
+    .catch(error => console.log(error))
+}
