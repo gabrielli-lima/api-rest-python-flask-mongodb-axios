@@ -20,7 +20,8 @@
                         class="fas fa-search btn-outline-secondary"></i></button>
                 <input type="text" class="form-control" placeholder="Pesquisar" aria-label="Pesquisar">
             </div>
-            <button type="submit" class="btn btn-success h-25"><i class="fas fa-plus"></i> Novo Usuário</button>
+            <button type="submit" class="btn btn-success h-25" data-bs-toggle="modal"
+                data-bs-target="#modalNovoUsuario"><i class="fas fa-plus"></i> Novo Usuário</button>
         </div>
         <table class="table table-bordered table-striped table-hover">
             <thead>
@@ -30,16 +31,41 @@
                     <th>Email</th>
                 </tr>
             </thead>
-            <tbody id="user-list">
+            <tbody id="lista-usuario">
             </tbody>
         </table>
-        <form id="addUserForm">
-            <input type="text" id="nomeUser" placeholder="Nome">
-            <input type="number" id="idadeUser" placeholder="Idade">
-            <input type="email" id="emailUser" placeholder="email@email.com">
-            <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Novo Usuário</button>
-            <button type="button" onclick="atualizarUsuario()" class="btn btn-primary">Editar</button>
-        </form>
+    </div>
+
+    <!-- Modal de novo usuário -->
+    <div class="modal fade" id="modalNovoUsuario">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cadastro de usuário</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovoUsuario" >
+                        <div>
+                            <label for="unome" class="form-label">Nome</label>
+                            <input type="text" id="unome" class="form-control" placeholder="Digite o nome">
+                        </div>
+                        <div class="my-3">
+                            <label for="uidade" class="form-label">Idade</label>
+                            <input type="number" id="uidade"class="form-control" placeholder="Digite a idade">
+                        </div>
+                        <div>
+                            <label for="uemail" class="form-label">Email</label>
+                            <input type="email" id="uemail" placeholder="email@email.com" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary" onclick="cadastrarNovoUsuario()">Salvar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

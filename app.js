@@ -1,16 +1,18 @@
 const url = 'http://localhost:8080/users'
 
-const nomeUser = document.getElementById('nomeUser')
-const idadeUser = document.getElementById('idadeUser')
-const emailUser = document.getElementById('emailUser')
-    
+const formNovoUsuario = document.getElementById('formNovoUsuario')
+const unome = document.getElementById('unome')
+const uidade = document.getElementById('uidade')
+const uemail = document.getElementById('uemail')
+const modalNovoUsuario = document.getElementById('modalNovoUsuario')
 
-var idUser
-function getUsers() {
+var idUsuario
+
+function getUsuarios() {
     axios.get(url)
         .then(response => {
             let users = response.data
-            const userList = document.getElementById('user-list')
+            const listaUsuario = document.getElementById('lista-usuario')
             users = JSON.parse(users)
             console.log(users)
 
@@ -26,10 +28,10 @@ function getUsers() {
                                 
                                 <a onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
                                 &nbsp;
-                                <a onclick="deletarUser('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
+                                <a onclick="deletarUsuario('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
                             </td>
                         `
-                userList.appendChild(row)
+                listaUsuario.appendChild(row)
             })
         })
         .catch(error => {
@@ -37,65 +39,54 @@ function getUsers() {
         })
 }
 
-function deletarUser(id, nome) {
+function deletarUsuario(id, nome) {
     if (confirm(`Você quer remover ${nome}?`)) {
         axios.delete(`${url}/${id}`)
             .then(response => console.log(response))
             .catch(error => console.error(error))
-        getUsers()
+        getUsuarios()
     }
 
 }
 
+function cadastrarNovoUsuario() {
+    const novoUsuario = {
+        nome: unome.value,
+        idade: parseInt(uidade.value),
+        email: uemail.value
+    }
 
-function addNovoUsuario(novoUsuario) {
-    console.log(novoUsuario)
+    unome.value = ''
+    uidade.value = ''
+    uemail.value = ''
+
     axios.post(url, novoUsuario)
         .then(response => {
             console.log(response)
-            getUsers()
+            getUsuarios()
         })
         .catch(error => console.log(error))
 }
 
-const addUserForm = document.getElementById('addUserForm')
-
-addUserForm.addEventListener('submit', function (event) {
-    event.preventDefault() // não permite o comportamento padrão do formulário com o botão de submit de recarregar a página
-
-    const novoUsuario = {
-        nome: nomeUser.value,
-        idade: parseInt(idadeUser.value),
-        email: emailUser.value
-    }
-
-    addNovoUsuario(novoUsuario)
-
-    nomeUser.value = ''
-    idadeUser.value = ''
-    emailUser.value = ''
-})
-
-document.addEventListener('DOMContentLoaded', getUsers)
+document.addEventListener('DOMContentLoaded', getUsuarios)
 
 function infoUsuario(id, nome, idade, email) {
-    nomeUser.value = nome
-    idadeUser.value = idade
-    emailUser.value = email
+    unome.value = nome
+    uidade.value = idade
+    uemail.value = email
 
-    idUser = id
+    idUsuario = id
 }
 
 function atualizarUsuario() {
-    console.log(idUser + "wwwww")
-    
-const usuarioAtualiazado = {
-    
-    nome: nomeUser.value,
-    idade: parseInt(idadeUser.value),
-    email: emailUser.value
-}
-    axios.put(`${url}/${idUser}`, usuarioAtualiazado)
-    .then(response => console.log(response))
-    .catch(error => console.log(error))
+
+    const usuarioAtualiazado = {
+
+        nome: unome.value,
+        idade: parseInt(uidade.value),
+        email: uemail.value
+    }
+    axios.put(`${url}/${idUsuario}`, usuarioAtualiazado)
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
 }
