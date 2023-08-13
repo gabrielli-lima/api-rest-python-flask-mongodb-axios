@@ -5,6 +5,13 @@ const unome = document.getElementById('unome')
 const uidade = document.getElementById('uidade')
 const uemail = document.getElementById('uemail')
 const modalNovoUsuario = document.getElementById('modalNovoUsuario')
+
+const formEditar = document.getElementById('formEditar')
+const unomeEditar = document.getElementById('unomeEditar')
+const uidadeEditar = document.getElementById('uidadeEditar')
+const uemailEditar = document.getElementById('uemailEditar')
+const modalEditar = document.getElementById('modalEditar')
+
 const modalDeletarUsuario = document.getElementById('modalDeletarUsuario')
 const txtDeletarUsuario = document.getElementById('txtDeletarUsuario')
 const confirmarExclusao = document.getElementById('confirmarExclusao')
@@ -29,7 +36,8 @@ function getUsuarios() {
                             <td>${user.email}</td>
                             <td class="text-center">
                                 
-                                <a onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
+                                <a data-bs-toggle="modal" data-bs-target="#modalEditar"
+                                    onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
                                 &nbsp;
                                 <a data-bs-toggle="modal" data-bs-target="#modalDeletarUsuario" 
                                     onclick="deletarUsuario('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
@@ -79,9 +87,9 @@ function deletarUsuario(id, nome) {
 document.addEventListener('DOMContentLoaded', getUsuarios)
 
 function infoUsuario(id, nome, idade, email) {
-    unome.value = nome
-    uidade.value = idade
-    uemail.value = email
+    unomeEditar.value = nome
+    uidadeEditar.value = idade
+    uemailEditar.value = email
 
     idUsuario = id
 }
@@ -89,12 +97,14 @@ function infoUsuario(id, nome, idade, email) {
 function atualizarUsuario() {
 
     const usuarioAtualiazado = {
-
-        nome: unome.value,
-        idade: parseInt(uidade.value),
-        email: uemail.value
+        nome: unomeEditar.value,
+        idade: parseInt(uidadeEditar.value),
+        email: uemailEditar.value
     }
     axios.put(`${url}/${idUsuario}`, usuarioAtualiazado)
-        .then(response => console.log(response))
+        .then(response => {
+            console.log(response)
+            console.log("Usuario atualizado")
+        })
         .catch(error => console.log(error))
 }
