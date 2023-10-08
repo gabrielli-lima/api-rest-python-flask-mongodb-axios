@@ -36,11 +36,11 @@ function getUsuarios() {
                             <td>${user.email}</td>
                             <td class="text-center">
                                 
-                                <a data-bs-toggle="modal" data-bs-target="#modalEditar"
-                                    onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
-                                &nbsp;
-                                <a data-bs-toggle="modal" data-bs-target="#modalDeletarUsuario" 
-                                    onclick="deletarUsuario('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
+                            <a data-bs-toggle="modal" data-bs-target="#modalEditar"
+                            onclick="infoUsuario('${user._id["$oid"]}', '${user.nome}', '${user.idade}', '${user.email}')"><i class="fas fa-edit text-warning"></i></a>
+                            &nbsp;
+                            <a data-bs-toggle="modal" data-bs-target="#modalDeletarUsuario" 
+                            onclick="deletarUsuario('${user._id["$oid"]}', '${user.nome}')"><i class="fas fa-trash text-danger"></i></a>
                             </td>
                         `
                 listaUsuario.appendChild(row)
@@ -50,6 +50,7 @@ function getUsuarios() {
             console.error('Erro ao obter os usuários:', error)
         })
 }
+document.addEventListener('DOMContentLoaded', getUsuarios())
 
 function cadastrarNovoUsuario() {
     const novoUsuario = {
@@ -66,7 +67,7 @@ function cadastrarNovoUsuario() {
         .then(response => {
             console.log(response)
             console.log("Usuario cadastrado")
-            getUsuarios()
+            window.location.reload();
         })
         .catch(error => console.log(error))
 }
@@ -75,16 +76,15 @@ function deletarUsuario(id, nome) {
     txtDeletarUsuario.innerText = `Você quer remover ${nome}?`
     confirmarExclusao.addEventListener('click', function () {
         axios.delete(`${url}/${id}`)
-        .then(response => {
-            console.log(response)
-            console.log("Usuario removido")
-            getUsuarios()
-        })
-        .catch(error => console.error(error))
+            .then(response => {
+                console.log(response)
+                console.log("Usuario removido")
+                window.location.reload();
+            })
+            .catch(error => console.error(error))
     }
-)}
-
-document.addEventListener('DOMContentLoaded', getUsuarios)
+    )
+}
 
 function infoUsuario(id, nome, idade, email) {
     unomeEditar.value = nome
@@ -105,6 +105,7 @@ function atualizarUsuario() {
         .then(response => {
             console.log(response)
             console.log("Usuario atualizado")
+            window.location.reload();
         })
         .catch(error => console.log(error))
 }
